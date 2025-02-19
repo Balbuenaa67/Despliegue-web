@@ -1,0 +1,21 @@
+# Usar la imagen base de Node.js 12.18.1 slim
+FROM node:12.18.1-slim
+
+# Establecer el directorio de trabajo dentro del contenedor
+WORKDIR /opt/microservices
+
+# Copiar los archivos package.json y ratings.js al contenedor
+COPY /practica_creativa2/bookinfo/src/ratings/ratings.js .
+COPY /practica_creativa2/bookinfo/src/ratings/package.json .
+
+# Especificar la variable de entorno
+ENV SERVICE_VERSION=v1
+
+# Instalar las dependencias
+RUN npm install
+
+# Exponer el puerto 9080
+EXPOSE 9080
+
+# Comando para ejecutar el fichero ratings.js
+CMD ["node", "ratings.js", "9080"]

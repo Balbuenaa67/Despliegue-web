@@ -1,0 +1,19 @@
+# Usar una imagen base de Python 3 
+FROM python:3.7.7-slim
+
+# Exponer el puerto en el que se ejecutará el servicio
+EXPOSE 9080
+
+# Instalar las librerías definidas en requirements.txt
+RUN apt-get update \
+    && apt-get install -y git
+RUN git clone https://github.com/CDPS-ETSIT/practica_creativa2.git
+RUN apt-get update
+RUN apt-get install -y python3-pip
+
+WORKDIR practica_creativa2/bookinfo/src/productpage
+
+RUN pip3 install -r requirements.txt
+
+# Comando para ejecutar el servicio 
+CMD ["python3", "productpage.py", "9080"]

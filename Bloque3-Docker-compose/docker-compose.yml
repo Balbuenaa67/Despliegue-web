@@ -1,0 +1,85 @@
+version: '3.3'
+
+services:
+
+  productpage:
+
+    build:
+      context: .
+      dockerfile: DockerfileProductPage
+
+    image: productpage/19
+
+    container_name: productpage-19
+
+    restart: always
+
+    ports:
+      - 9080:9080
+
+    links:
+      - details
+      - reviews
+      
+      
+
+  details:
+
+    build:
+      context: .
+      dockerfile: DockerfileDetails
+
+    image: details/19
+
+    container_name: details-19
+
+    environment:
+     - SERVICE_VERSION=v1
+     - ENABLE_EXTERNAL_BOOK_SERVICE=true
+
+    restart: always
+
+    ports:
+      - '9080'
+
+
+  reviews:
+
+    build:
+      context: practica_creativa2/bookinfo/src/reviews/reviews-wlpcfg
+
+    image: reviews/19
+
+    container_name: reviews-19
+
+    environment:
+     - ENABLE_RATINGS=true  #para v2 y v3 es true; false para v1 
+     - STAR_COLOR=red     #red para v3; para v1 y v2 black
+     - SERVICE_VERSION=v3   #v1 o v2 o v3 
+
+    restart: always
+
+    ports: 
+      - '9080'
+      
+    links:
+      - ratings
+
+
+  ratings:
+
+    build:
+      context: .
+      dockerfile: DockerfileRatings
+
+    image: ratings/19
+
+    container_name: ratings-19
+
+    environment:
+     - SERVICE_VERSION=v1
+
+    restart: always
+
+    ports:
+      - '9080'
